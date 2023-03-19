@@ -127,9 +127,9 @@
         <h1 class="invoice-title"><?php echo trans('invoice') . ' ' . $invoice->invoice_number; ?></h1>
 
         <div>
-            Guten Tag Frau Giering,
+            Guten Tag Frau Giering,<br>
             Für die Arbeit als Webprogrammierer und Grafiker für Himmlisch unterwegs im Zeitraum September 2022 bis
-            einschließlich Oktober 2022 berechne ich:
+            einschließlich Oktober 2022 berechne ich:<br>
         </div>
 
         <table class="item-table">
@@ -252,10 +252,6 @@
                 </tr>
             </tbody>
         </table>
-        <div>
-            Mit freundlichen Grüßen
-            Fabian Giering
-        </div>
     </main>
 
     <footer>
@@ -263,6 +259,10 @@
             <div class="notes">
                 <b><?php _trans('terms'); ?></b><br />
                 <?php echo nl2br(htmlsc($invoice->invoice_terms)); ?>
+            </div>
+            <div>
+                Mit freundlichen Grüßen<br>
+                Fabian Giering<br>
             </div>
         <?php endif; ?>
     </footer>
