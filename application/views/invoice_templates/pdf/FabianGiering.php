@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/core/css/custom-pdf.css">
     <style>
         body {
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .invoice-title {
@@ -18,6 +18,13 @@
         #invoice-logo {
             text-align: right;
             width: 100px;
+        }
+
+        footer {
+            color: black;
+            width: 100%;
+            border-top: none;
+            padding: 8px 0;
         }
     </style>
 </head>
@@ -31,7 +38,9 @@
 
         <div id="client">
             <div>
-
+                <?php if ($custom_fields['client']["Firma"]) {
+                    echo '<b>' . htmlsc($custom_fields['client']["Firma"]) . '</b><br>';
+                } ?>
                 <b><?php _htmlsc(format_client($invoice)); ?></b>
             </div>
             <?php
@@ -49,10 +58,10 @@
                 if ($invoice->client_city) {
                     echo htmlsc($invoice->client_city) . ' ';
                 }
-                echo '<br/>';
-                if ($invoice->client_state) {
-                    echo htmlsc($invoice->client_state) . ' ';
-                }
+                // echo '<br/>';
+                // if ($invoice->client_state) {
+                //     echo htmlsc($invoice->client_state) . ' ';
+                // }
                 echo '</div>';
             }
             if ($invoice->client_country) {
@@ -93,15 +102,26 @@
                     echo htmlsc($invoice->user_city) . ' ';
                 }
                 echo '<br/>';
-                if ($invoice->user_state) {
-                    echo htmlsc($invoice->user_state) . ' ';
+                if ($invoice->user_mobile) {
+                    echo htmlsc($invoice->user_mobile) . ' ';
                 }
+                echo '<br/>';
+                if ($invoice->user_email) {
+                    echo htmlsc($invoice->user_email) . ' ';
+                }
+                echo '<br/>';
+                if ($invoice->user_web) {
+                    echo htmlsc($invoice->user_web) . ' ';
+                }
+                // if ($invoice->user_state) {
+                //     echo htmlsc($invoice->user_state) . ' ';
+                // }
 
                 echo '</div>';
             }
-            if ($invoice->user_country) {
-                echo '<div>' . get_country_name(trans('cldr'), $invoice->user_country) . '</div>';
-            }
+            // if ($invoice->user_country) {
+            //     echo '<div>' . get_country_name(trans('cldr'), $invoice->user_country) . '</div>';
+            // }
 
             echo '<br/>';
 
@@ -156,11 +176,9 @@
 
         <h1 class="invoice-title"><?php echo trans('invoice') . ' ' . $invoice->invoice_number; ?></h1>
 
-        <div>
-            Guten Tag Frau Giering,<br>
-            Für die Arbeit als Webprogrammierer und Grafiker für Himmlisch unterwegs im Zeitraum September 2022 bis
-            einschließlich Oktober 2022 berechne ich:<br><br>
-        </div>
+        <?php if ($custom_fields['invoice']['Einleitungstext']) {
+            echo '<div>' . $custom_fields['invoice']['Einleitungstext'] . '<br><br></div>';
+        } ?>
 
         <table class="item-table">
             <thead>
@@ -282,6 +300,7 @@
                 </tr>
             </tbody>
         </table>
+
     </main>
 
     <footer>
@@ -290,12 +309,10 @@
                 <b><?php _trans('terms'); ?></b><br />
                 <?php echo nl2br(htmlsc($invoice->invoice_terms)); ?>
             </div>
-            <div>
-                <br>
-                Mit freundlichen Grüßen<br>
-                Fabian Giering<br>
-            </div>
         <?php endif; ?>
+        <?php if ($custom_fields['invoice']['Verabschiedungstext']) {
+            echo '<div><br>' . $custom_fields['invoice']['Verabschiedungstext'] . '<br></div>';
+        } ?>
     </footer>
 
 </body>
