@@ -6,6 +6,20 @@
     <title><?php _trans('invoice'); ?></title>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/<?php echo get_setting('system_theme', 'invoiceplane'); ?>/css/templates.css">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/core/css/custom-pdf.css">
+    <style>
+        body {
+            font-size: 12px;
+        }
+
+        .invoice-title {
+            color: #41474b;
+        }
+
+        #invoice-logo {
+            text-align: right;
+            width: 100px;
+        }
+    </style>
 </head>
 
 <body>
@@ -17,14 +31,10 @@
 
         <div id="client">
             <div>
+
                 <b><?php _htmlsc(format_client($invoice)); ?></b>
             </div>
-            <?php if ($invoice->client_vat_id) {
-                echo '<div>' . trans('vat_id_short') . ': ' . $invoice->client_vat_id . '</div>';
-            }
-            if ($invoice->client_tax_code) {
-                echo '<div>' . trans('tax_code_short') . ': ' . $invoice->client_tax_code . '</div>';
-            }
+            <?php
             if ($invoice->client_address_1) {
                 echo '<div>' . htmlsc($invoice->client_address_1) . '</div>';
             }
@@ -33,14 +43,15 @@
             }
             if ($invoice->client_city || $invoice->client_state || $invoice->client_zip) {
                 echo '<div>';
+                if ($invoice->client_zip) {
+                    echo htmlsc($invoice->client_zip) . ' ';
+                }
                 if ($invoice->client_city) {
                     echo htmlsc($invoice->client_city) . ' ';
                 }
+                echo '<br/>';
                 if ($invoice->client_state) {
                     echo htmlsc($invoice->client_state) . ' ';
-                }
-                if ($invoice->client_zip) {
-                    echo htmlsc($invoice->client_zip);
                 }
                 echo '</div>';
             }
@@ -52,17 +63,21 @@
 
             if ($invoice->client_phone) {
                 echo '<div>' . trans('phone_abbr') . ': ' . htmlsc($invoice->client_phone) . '</div>';
-            } ?>
+            }
+            if ($invoice->client_vat_id) {
+                echo '<div>' . trans('vat_id_short') . ': ' . $invoice->client_vat_id . '</div>';
+            }
+            if ($invoice->client_tax_code) {
+                echo '<div>' . trans('tax_code_short') . ': ' . $invoice->client_tax_code . '</div>';
+            }
+
+
+            ?>
 
         </div>
         <div id="company">
             <div><b><?php _htmlsc($invoice->user_name); ?></b></div>
-            <?php if ($invoice->user_vat_id) {
-                echo '<div>' . trans('vat_id_short') . ': ' . $invoice->user_vat_id . '</div>';
-            }
-            if ($invoice->user_tax_code) {
-                echo '<div>' . trans('tax_code_short') . ': ' . $invoice->user_tax_code . '</div>';
-            }
+            <?php
             if ($invoice->user_address_1) {
                 echo '<div>' . htmlsc($invoice->user_address_1) . '</div>';
             }
@@ -71,15 +86,17 @@
             }
             if ($invoice->user_city || $invoice->user_state || $invoice->user_zip) {
                 echo '<div>';
+                if ($invoice->user_zip) {
+                    echo htmlsc($invoice->user_zip) . ' ';
+                }
                 if ($invoice->user_city) {
                     echo htmlsc($invoice->user_city) . ' ';
                 }
+                echo '<br/>';
                 if ($invoice->user_state) {
                     echo htmlsc($invoice->user_state) . ' ';
                 }
-                if ($invoice->user_zip) {
-                    echo htmlsc($invoice->user_zip);
-                }
+
                 echo '</div>';
             }
             if ($invoice->user_country) {
@@ -94,6 +111,13 @@
             if ($invoice->user_fax) {
                 echo '<div>' . trans('fax_abbr') . ': ' . htmlsc($invoice->user_fax) . '</div>';
             }
+
+            if ($invoice->user_vat_id) {
+                echo '<div>' . trans('vat_id_short') . ': ' . $invoice->user_vat_id . '</div>';
+            }
+            if ($invoice->user_tax_code) {
+                echo '<div>' . trans('tax_code_short') . ': ' . $invoice->user_tax_code . '</div>';
+            }
             ?>
         </div>
 
@@ -103,6 +127,12 @@
 
         <div class="invoice-details clearfix">
             <table>
+                <tr>
+                    <td><?php echo 'Kundennummer' . ':'; ?></td>
+                    <td><?php if ($custom_fields['client']['Kundennummer']) {
+                            echo $custom_fields['client']['Kundennummer'];
+                        } ?></td>
+                </tr>
                 <tr>
                     <td><?php echo trans('invoice_date') . ':'; ?></td>
                     <td><?php echo date_from_mysql($invoice->invoice_date_created, true); ?></td>
@@ -129,7 +159,7 @@
         <div>
             Guten Tag Frau Giering,<br>
             Für die Arbeit als Webprogrammierer und Grafiker für Himmlisch unterwegs im Zeitraum September 2022 bis
-            einschließlich Oktober 2022 berechne ich:<br>
+            einschließlich Oktober 2022 berechne ich:<br><br>
         </div>
 
         <table class="item-table">
@@ -261,6 +291,7 @@
                 <?php echo nl2br(htmlsc($invoice->invoice_terms)); ?>
             </div>
             <div>
+                <br>
                 Mit freundlichen Grüßen<br>
                 Fabian Giering<br>
             </div>
